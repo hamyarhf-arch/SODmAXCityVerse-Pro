@@ -2105,7 +2105,7 @@
                         کیف پول چند ارزی
                     </h3>
                     
-                    <div class="wallet-balance-item" onclick="showModalMobile('walletModal')">
+                    <div class="wallet-balance-item" onclick="showWalletDetails()">
                         <div class="wallet-icon" style="background: rgba(0, 102, 255, 0.2); color: var(--primary);">
                             <i class="fas fa-coins"></i>
                         </div>
@@ -2115,7 +2115,7 @@
                         </div>
                     </div>
                     
-                    <div class="wallet-balance-item" onclick="showModalMobile('walletModal')">
+                    <div class="wallet-balance-item" onclick="showWalletDetails()">
                         <div class="wallet-icon" style="background: rgba(0, 212, 170, 0.2); color: var(--secondary);">
                             <i class="fas fa-money-bill-wave"></i>
                         </div>
@@ -2125,7 +2125,7 @@
                         </div>
                     </div>
                     
-                    <div class="wallet-balance-item" onclick="showModalMobile('walletModal')">
+                    <div class="wallet-balance-item" onclick="showWalletDetails()">
                         <div class="wallet-icon" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6;">
                             <i class="fas fa-dollar-sign"></i>
                         </div>
@@ -2621,7 +2621,7 @@
             </a>
             <a href="#invite" class="bottom-nav-item" onclick="showSectionMobile('invite')">
                 <i class="fas fa-user-plus bottom-nav-icon"></i>
-                                <span class="bottom-nav-label">دعوت دوستان</span>
+                <span class="bottom-nav-label">دعوت دوستان</span>
             </a>
             <a href="#rewards" class="bottom-nav-item" onclick="showSectionMobile('rewards')">
                 <i class="fas fa-gift bottom-nav-icon"></i>
@@ -4345,6 +4345,11 @@
             showToastMobile('📅 پاداش روزانه', `+${reward.toLocaleString('fa-IR')} تومان دریافت کردید!`, 'success');
         }
 
+        // ==================== عملکردهای کیف پول ====================
+        function showWalletDetails() {
+            showModalMobile('walletModal');
+        }
+
         function withdrawTomanMobile() {
             if (!mobileClient.currentUser) return;
             
@@ -4362,11 +4367,96 @@
         }
 
         function buySodMobile() {
-            showToastMobile('🛒 خرید SOD', 'صفحه خرید به زودی فعال خواهد شد!', 'info');
+            if (!mobileClient.currentUser) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            // شبیه‌سازی خرید SOD
+            const amount = 1000;
+            const cost = 5000; // تومان
+            
+            if (mobileClient.currentUser.tomanBalance < cost) {
+                showToastMobile('⚠️ خطا', `موجودی تومان کافی نیست! نیاز به ${cost.toLocaleString('fa-IR')} تومان`, 'error');
+                return;
+            }
+            
+            mobileClient.currentUser.tomanBalance -= cost;
+            mobileClient.currentUser.sodBalance += amount;
+            
+            mobileClient.userManager.addTransaction(mobileClient.currentUser.id, {
+                type: "خرید SOD",
+                amount: -cost,
+                currency: "تومان",
+                status: "موفق",
+                icon: "fa-shopping-cart",
+                color: "var(--secondary)"
+            });
+            
+            mobileClient.userManager.addTransaction(mobileClient.currentUser.id, {
+                type: "خرید SOD",
+                amount: amount,
+                currency: "SOD",
+                status: "موفق",
+                icon: "fa-coins",
+                color: "var(--primary)"
+            });
+            
+            mobileClient.userManager.updateUser(mobileClient.currentUser);
+            updateMobileUI();
+            
+            showToastMobile('🛒 خرید موفق', 
+                `${amount.toLocaleString('fa-IR')} SOD خریداری شد!\n${cost.toLocaleString('fa-IR')} تومان کسر شد.`,
+                'success'
+            );
+            closeModalMobile('walletModal');
         }
 
         function convertCurrencyMobile() {
-            showToastMobile('💰 تبدیل ارز', 'سیستم تبدیل ارز به زودی فعال خواهد شد!', 'info');
+            if (!mobileClient.currentUser) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            // شبیه‌سازی تبدیل ارز
+            const sodToConvert = 1000;
+            const exchangeRate = 10; // 1 SOD = 10 تومان
+            const tomanAmount = sodToConvert * exchangeRate;
+            
+            if (mobileClient.currentUser.sodBalance < sodToConvert) {
+                showToastMobile('⚠️ خطا', `موجودی SOD کافی نیست! نیاز به ${sodToConvert.toLocaleString('fa-IR')} SOD`, 'error');
+                return;
+            }
+            
+            mobileClient.currentUser.sodBalance -= sodToConvert;
+            mobileClient.currentUser.tomanBalance += tomanAmount;
+            
+            mobileClient.userManager.addTransaction(mobileClient.currentUser.id, {
+                type: "تبدیل SOD به تومان",
+                amount: -sodToConvert,
+                currency: "SOD",
+                status: "موفق",
+                icon: "fa-exchange-alt",
+                color: "var(--primary)"
+            });
+            
+            mobileClient.userManager.addTransaction(mobileClient.currentUser.id, {
+                type: "تبدیل SOD به تومان",
+                amount: tomanAmount,
+                currency: "تومان",
+                status: "موفق",
+                icon: "fa-exchange-alt",
+                color: "var(--secondary)"
+            });
+            
+            mobileClient.userManager.updateUser(mobileClient.currentUser);
+            updateMobileUI();
+            
+            showToastMobile('💰 تبدیل موفق', 
+                `${sodToConvert.toLocaleString('fa-IR')} SOD به ${tomanAmount.toLocaleString('fa-IR')} تومان تبدیل شد!`,
+                'success'
+            );
+            closeModalMobile('walletModal');
         }
 
         function showAllMissionsMobile() {
@@ -4421,41 +4511,49 @@
         // ==================== عملکردهای دعوت دوستان ====================
         function copyReferralLink() {
             const user = mobileClient.currentUser;
-            if (!user) return;
+            if (!user) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
             
             const link = user.referralLink;
             
             // استفاده از Clipboard API در صورت موجود بودن
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(link).then(() => {
-                    showToastMobile('📋 کپی شد', 'لینک دعوت با موفقیت کپی شد!', 'success');
+                    showToastMobile('✅ لینک کپی شد', 'لینک دعوت در کلیپ‌بورد ذخیره شد!\n\n' + link, 'success');
+                    mobileClient.vibrate([50]); // ویبره تأیید
                 }).catch(err => {
-                    fallbackCopyToClipboard(link);
+                    fallbackCopyToClipboard(link, 'لینک دعوت');
                 });
             } else {
-                fallbackCopyToClipboard(link);
+                fallbackCopyToClipboard(link, 'لینک دعوت');
             }
         }
 
         function copyReferralCode() {
             const user = mobileClient.currentUser;
-            if (!user) return;
+            if (!user) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
             
             const code = user.referralCode;
             
             // استفاده از Clipboard API در صورت موجود بودن
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(code).then(() => {
-                    showToastMobile('📋 کپی شد', 'کد دعوت با موفقیت کپی شد!', 'success');
+                    showToastMobile('✅ کد کپی شد', 'کد دعوت در کلیپ‌بورد ذخیره شد!\n\n' + code, 'success');
+                    mobileClient.vibrate([50]); // ویبره تأیید
                 }).catch(err => {
-                    fallbackCopyToClipboard(code);
+                    fallbackCopyToClipboard(code, 'کد دعوت');
                 });
             } else {
-                fallbackCopyToClipboard(code);
+                fallbackCopyToClipboard(code, 'کد دعوت');
             }
         }
 
-        function fallbackCopyToClipboard(text) {
+        function fallbackCopyToClipboard(text, type) {
             const textArea = document.createElement('textarea');
             textArea.value = text;
             textArea.style.position = 'fixed';
@@ -4467,7 +4565,8 @@
             
             try {
                 document.execCommand('copy');
-                showToastMobile('📋 کپی شد', 'محتوا با موفقیت کپی شد!', 'success');
+                showToastMobile('✅ کپی شد', `${type} با موفقیت کپی شد!\n\n${text}`, 'success');
+                mobileClient.vibrate([50]); // ویبره تأیید
             } catch (err) {
                 showToastMobile('⚠️ خطا', 'کپی کردن با مشکل مواجه شد', 'error');
             }
@@ -4477,9 +4576,21 @@
 
         function shareViaWhatsApp() {
             const user = mobileClient.currentUser;
-            if (!user) return;
+            if (!user) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
             
-            const message = `به SODmAX CityVerse بپیوندید! 🌟\n\nبا استفاده از لینک زیر ثبت‌نام کنید و ۱۰۰۰ SOD هدیه دریافت کنید:\n${user.referralLink}\n\nکد دعوت: ${user.referralCode}`;
+            const message = `🎮 به SODmAX CityVerse بپیوندید! 🚀
+
+با استفاده از لینک زیر ثبت‌نام کنید و ۱۰۰۰ SOD هدیه دریافت کنید:
+
+${user.referralLink}
+
+🎁 کد دعوت اختصاصی: ${user.referralCode}
+
+💰 با دعوت دوستان، به ازای هر دعوت موفق ۱,۰۰۰ تومان پاداش دریافت کنید!`;
+
             const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
             
             window.open(url, '_blank');
@@ -4488,9 +4599,21 @@
 
         function shareViaTelegram() {
             const user = mobileClient.currentUser;
-            if (!user) return;
+            if (!user) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
             
-            const message = `به SODmAX CityVerse بپیوندید! 🌟\n\nبا استفاده از لینک زیر ثبت‌نام کنید و ۱۰۰۰ SOD هدیه دریافت کنید:\n${user.referralLink}\n\nکد دعوت: ${user.referralCode}`;
+            const message = `🎮 به SODmAX CityVerse بپیوندید! 🚀
+
+با استفاده از لینک زیر ثبت‌نام کنید و ۱۰۰۰ SOD هدیه دریافت کنید:
+
+${user.referralLink}
+
+🎁 کد دعوت اختصاصی: ${user.referralCode}
+
+💰 با دعوت دوستان، به ازای هر دعوت موفق ۱,۰۰۰ تومان پاداش دریافت کنید!`;
+
             const url = `https://t.me/share/url?url=${encodeURIComponent(user.referralLink)}&text=${encodeURIComponent(message)}`;
             
             window.open(url, '_blank');
@@ -4498,11 +4621,38 @@
         }
 
         function shareViaInstagram() {
-            showToastMobile('📱 اینستاگرام', 'اشتراک‌گذاری در اینستاگرام به زودی فعال خواهد شد!', 'info');
+            const user = mobileClient.currentUser;
+            if (!user) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
+            
+            const message = `🎮 SODmAX CityVerse - کسب درآمد از طریق بازی و استخراج!
+
+لینک ثبت‌نام: ${user.referralLink}
+کد دعوت: ${user.referralCode}
+
+#SODmAX #CityVerse #درآمدزایی #استخراج #بازی`;
+
+            // برای اینستاگرام باید یک استوری یا پست ایجاد کرد
+            // در موبایل، باز کردن اینستاگرام با متن پیشنهادی
+            const url = `instagram://create?text=${encodeURIComponent(message)}`;
+            
+            // اگر اینستاگرام نصب نیست، پیام نشان بده
+            window.location.href = url;
+            setTimeout(() => {
+                showToastMobile('📱 اینستاگرام', 
+                    'لطفاً متن زیر را کپی کرده و در اینستاگرام اشتراک‌گذاری کنید:\n\n' + message, 
+                    'info'
+                );
+            }, 1000);
         }
 
         function inviteFriendMobile() {
-            if (!mobileClient.currentUser) return;
+            if (!mobileClient.currentUser) {
+                showToastMobile('⚠️ خطا', 'لطفاً ابتدا وارد شوید', 'error');
+                return;
+            }
             
             if (mobileClient.inviteFriend(mobileClient.currentUser)) {
                 updateMobileUI();
