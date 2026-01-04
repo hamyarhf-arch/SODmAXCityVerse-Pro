@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ّ<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         :root {
             --primary: #0066FF;
             --primary-dark: #0052CC;
-            --primary-light: #3395FF;
+            --primary-light: #3395FF;ّ
             --secondary: #00D4AA;
             --accent: #FF6B35;
             --premium: #FFD700;
@@ -126,18 +126,18 @@
             pointer-events: none;
         }
 
-        .auth-card {
-            background: var(--bg-surface);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: var(--shadow-lg);
-            animation: slideUpAuth 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            position: relative;
-            overflow: hidden;
-        }
+       .auth-card {
+    background: var(--bg-surface);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg); /* از xl به lg تغییر دادم */
+    width: 100%;
+    max-width: 95%; /* اصلاح شد: از 400px به 95% */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--shadow-lg);
+    animation: slideUpAuth 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+    overflow: hidden;
+}
 
         .auth-card::before {
             content: '';
@@ -4537,6 +4537,28 @@
                 }
             }, 500);
         }
+        /* اصلاح فرم ثبت‌نام برای موبایل */
+.auth-card {
+    max-width: 95% !important;
+    padding: 20px !important;
+    margin: 10px;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 15px !important;
+    }
+    
+    .form-input {
+        font-size: 16px !important;
+        padding: 12px !important;
+    }
+    
+    .auth-btn {
+        padding: 14px !important;
+        font-size: 16px !important;
+    }
+}
     </script>
 </body>
 </html>
