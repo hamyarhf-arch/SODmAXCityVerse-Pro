@@ -104,7 +104,7 @@
             display: none !important;
         }
 
-        /* ==================== بخش احراز هویت ==================== */
+        /* ==================== بخش احراز هویت - بهبود یافته ==================== */
         .auth-container {
             position: fixed;
             top: 0;
@@ -114,11 +114,13 @@
             background: var(--bg-overlay);
             backdrop-filter: blur(20px);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
-            padding: var(--space-md);
+            padding: var(--space-sm);
             z-index: var(--z-auth);
             transition: opacity var(--transition-base);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .auth-container.hidden {
@@ -128,15 +130,16 @@
 
         .auth-card {
             background: var(--bg-surface);
-            border-radius: var(--radius-xl);
-            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
             width: 100%;
-            max-width: 400px;
+            max-width: 100%;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: var(--shadow-lg);
             animation: slideUpAuth 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative;
             overflow: hidden;
+            margin: auto;
         }
 
         .auth-card::before {
@@ -162,7 +165,7 @@
 
         .auth-header {
             text-align: center;
-            margin-bottom: var(--space-xl);
+            margin-bottom: var(--space-lg);
         }
 
         .auth-logo {
@@ -170,18 +173,18 @@
             align-items: center;
             justify-content: center;
             gap: var(--space-sm);
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
         }
 
         .auth-logo-icon {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             background: var(--gradient-primary);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 900;
             color: white;
             box-shadow: var(--shadow-primary);
@@ -194,7 +197,7 @@
         }
 
         .auth-logo-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 900;
             background: var(--gradient-primary);
             -webkit-background-clip: text;
@@ -203,26 +206,26 @@
         }
 
         .auth-logo-subtitle {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-tertiary);
         }
 
         .auth-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
             color: var(--text-primary);
             margin-bottom: var(--space-xs);
         }
 
         .auth-subtitle {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-tertiary);
         }
 
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: var(--space-md);
+            gap: var(--space-sm);
         }
 
         .form-group {
@@ -239,7 +242,7 @@
 
         .form-input {
             width: 100%;
-            padding: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: var(--radius-lg);
@@ -247,6 +250,8 @@
             font-family: inherit;
             font-size: 14px;
             transition: all var(--transition-base);
+            min-height: 44px;
+            -webkit-appearance: none;
         }
 
         .form-input:focus {
@@ -262,7 +267,7 @@
         }
 
         .form-error {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--error);
             margin-top: var(--space-xs);
             display: flex;
@@ -280,13 +285,19 @@
 
         .password-toggle {
             position: absolute;
-            left: var(--space-md);
-            top: 42px;
+            left: var(--space-sm);
+            top: 38px;
             background: none;
             border: none;
             color: var(--text-tertiary);
             cursor: pointer;
             transition: color var(--transition-base);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
         }
 
         .password-toggle:hover {
@@ -295,13 +306,13 @@
 
         .auth-btn {
             width: 100%;
-            padding: var(--space-md);
+            padding: var(--space-sm) var(--space-md);
             background: var(--gradient-primary);
             border: none;
             border-radius: var(--radius-lg);
             color: white;
             font-family: inherit;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             transition: all var(--transition-base);
@@ -310,6 +321,8 @@
             justify-content: center;
             gap: var(--space-sm);
             margin-top: var(--space-md);
+            min-height: 44px;
+            -webkit-tap-highlight-color: rgba(0, 102, 255, 0.2);
         }
 
         .auth-btn:hover {
@@ -329,13 +342,13 @@
 
         .auth-switch {
             text-align: center;
-            margin-top: var(--space-lg);
-            padding-top: var(--space-lg);
+            margin-top: var(--space-md);
+            padding-top: var(--space-md);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .auth-switch-text {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-tertiary);
         }
 
@@ -347,6 +360,7 @@
             cursor: pointer;
             margin-right: var(--space-xs);
             transition: color var(--transition-base);
+            -webkit-tap-highlight-color: rgba(0, 102, 255, 0.2);
         }
 
         .auth-switch-btn:hover {
@@ -354,10 +368,10 @@
         }
 
         .auth-terms {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-tertiary);
             text-align: center;
-            margin-top: var(--space-lg);
+            margin-top: var(--space-md);
             line-height: 1.5;
         }
 
@@ -1424,6 +1438,11 @@
             .mining-controls-mobile {
                 grid-template-columns: repeat(4, 1fr);
             }
+            
+            /* بهبود فرم در تبلت */
+            .auth-card {
+                max-width: 400px;
+            }
         }
 
         /* اسکرول‌بار سفارشی */
@@ -1485,6 +1504,20 @@
                 height: 150px;
                 margin: var(--space-sm) auto;
             }
+            
+            /* بهبود فرم در حالت افقی */
+            .auth-container {
+                padding-top: var(--space-md);
+                align-items: flex-start;
+                overflow-y: auto;
+            }
+            
+            .auth-card {
+                margin-top: var(--space-md);
+                margin-bottom: var(--space-md);
+                max-height: 90vh;
+                overflow-y: auto;
+            }
         }
 
         /* سوئیچ */
@@ -1537,6 +1570,98 @@
         
         .slider.round:before {
             border-radius: 50%;
+        }
+        
+        /* بهبود برای موبایل‌های بسیار کوچک */
+        @media (max-width: 360px) {
+            .auth-card {
+                padding: var(--space-md);
+                border-radius: var(--radius-md);
+            }
+            
+            .auth-logo-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            
+            .auth-logo-title {
+                font-size: 16px;
+            }
+            
+            .auth-title {
+                font-size: 18px;
+            }
+            
+            .auth-subtitle {
+                font-size: 12px;
+            }
+            
+            .form-input {
+                font-size: 13px;
+                padding: var(--space-xs) var(--space-sm);
+            }
+            
+            .auth-btn {
+                font-size: 13px;
+                padding: var(--space-xs) var(--space-sm);
+            }
+            
+            .password-toggle {
+                top: 35px;
+                left: 8px;
+            }
+            
+            .auth-header {
+                margin-bottom: var(--space-md);
+            }
+            
+            .auth-logo {
+                margin-bottom: var(--space-sm);
+            }
+        }
+        
+        /* بهبود برای ارتفاع کم */
+        @media (max-height: 700px) {
+            .auth-card {
+                padding: var(--space-md);
+            }
+            
+            .auth-header {
+                margin-bottom: var(--space-md);
+            }
+            
+            .auth-form {
+                gap: var(--space-xs);
+            }
+            
+            .auth-switch {
+                margin-top: var(--space-sm);
+                padding-top: var(--space-sm);
+            }
+            
+            .auth-terms {
+                margin-top: var(--space-sm);
+            }
+            
+            .form-input {
+                padding: 10px var(--space-sm);
+                min-height: 40px;
+            }
+            
+            .auth-btn {
+                min-height: 40px;
+                margin-top: var(--space-sm);
+            }
+        }
+        
+        /* جلوگیری از zoom در iOS */
+        @media screen and (max-width: 768px) {
+            .auth-card input[type="text"],
+            .auth-card input[type="tel"],
+            .auth-card input[type="password"] {
+                font-size: 16px !important;
+            }
         }
     </style>
 </head>
@@ -3476,6 +3601,42 @@
             
             // تست ویبره
             vibrateTest();
+            
+            // تنظیم خودکار ارتفاع برای موبایل
+            adjustAuthFormForMobile();
+        }
+
+        // تنظیم خودکار فرم برای موبایل
+        function adjustAuthFormForMobile() {
+            const authContainer = document.getElementById('authContainer');
+            const authCard = document.querySelector('.auth-card');
+            
+            if (!authContainer || !authCard) return;
+            
+            // تنظیم برای ارتفاع کم
+            if (window.innerHeight < 600) {
+                authContainer.style.alignItems = 'flex-start';
+                authContainer.style.paddingTop = '10px';
+                authCard.style.marginTop = '10px';
+                authCard.style.marginBottom = '10px';
+                authCard.style.maxHeight = '90vh';
+                authCard.style.overflowY = 'auto';
+                authCard.style.padding = 'var(--space-md)';
+            } else {
+                authContainer.style.alignItems = 'center';
+                authContainer.style.paddingTop = 'var(--space-sm)';
+                authCard.style.marginTop = 'auto';
+                authCard.style.marginBottom = 'auto';
+                authCard.style.maxHeight = 'none';
+                authCard.style.overflowY = 'visible';
+            }
+            
+            // تنظیم برای حالت افقی
+            if (window.innerWidth > window.innerHeight && window.innerHeight < 500) {
+                authContainer.style.alignItems = 'flex-start';
+                authCard.style.maxHeight = '90vh';
+                authCard.style.overflowY = 'auto';
+            }
         }
 
         // نمایش اپلیکیشن
@@ -3489,18 +3650,27 @@
             document.getElementById('authContainer').classList.remove('hidden');
             document.getElementById('appContainer').classList.remove('active');
             showRegisterForm(); // نمایش فرم ثبت‌نام به صورت پیش‌فرض
+            
+            // تنظیم مجدد برای موبایل
+            setTimeout(adjustAuthFormForMobile, 100);
         }
 
         // نمایش فرم ثبت‌نام
         function showRegisterForm() {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
+            
+            // تنظیم مجدد برای موبایل
+            setTimeout(adjustAuthFormForMobile, 100);
         }
 
         // نمایش فرم ورود
         function showLoginForm() {
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('loginForm').classList.remove('hidden');
+            
+            // تنظیم مجدد برای موبایل
+            setTimeout(adjustAuthFormForMobile, 100);
         }
 
         // بروزرسانی UI
@@ -4384,6 +4554,12 @@
         // ==================== رویدادها ====================
         document.addEventListener('DOMContentLoaded', initializeMobile);
 
+        // رسیز ویندو برای تنظیم مجدد فرم
+        window.addEventListener('resize', adjustAuthFormForMobile);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(adjustAuthFormForMobile, 300);
+        });
+
         // کلیک خارج از منو
         document.addEventListener('click', function(event) {
             const menu = document.getElementById('mobileMenu');
@@ -4412,19 +4588,19 @@
         }, { passive: false });
 
         // تنظیمات سوئیچ‌ها
-        document.getElementById('darkModeToggle').addEventListener('change', function(e) {
+        document.getElementById('darkModeToggle')?.addEventListener('change', function(e) {
             showToastMobile('🌙 حالت شب', this.checked ? 'فعال شد' : 'غیرفعال شد', 'info');
         });
         
-        document.getElementById('notificationsToggle').addEventListener('change', function(e) {
+        document.getElementById('notificationsToggle')?.addEventListener('change', function(e) {
             showToastMobile('🔔 اعلان‌ها', this.checked ? 'فعال شد' : 'غیرفعال شد', 'info');
         });
         
-        document.getElementById('soundToggle').addEventListener('change', function(e) {
+        document.getElementById('soundToggle')?.addEventListener('change', function(e) {
             showToastMobile('🔊 صدا', this.checked ? 'فعال شد' : 'غیرفعال شد', 'info');
         });
         
-        document.getElementById('vibrationToggle').addEventListener('change', function(e) {
+        document.getElementById('vibrationToggle')?.addEventListener('change', function(e) {
             showToastMobile('📳 ویبره', this.checked ? 'فعال شد' : 'غیرفعال شد', 'info');
         });
 
